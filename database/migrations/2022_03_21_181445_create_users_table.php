@@ -20,11 +20,11 @@ return new class extends Migration
             $table->string('cpf')->unique();
             $table->string('email');
             $table->string('phone');
-            $table->string('cep');
+            $table->char('cep', 11);
             $table->string('public_place')->nullable();
             $table->string('district')->nullable();
             $table->string('city');
-            $table->string('uf');
+            $table->char('uf',2);
         });
     }
 

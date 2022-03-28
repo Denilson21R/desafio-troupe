@@ -23,4 +23,13 @@ class User extends Model
     ];
 
     public $timestamps = false;
+
+    public function fillWithCpfData($dados_cep) :void
+    {
+        $this->cep = $dados_cep->cep;
+        $this->public_place = $dados_cep->logradouro;
+        $this->district = $dados_cep->bairro;
+        $this->city = $dados_cep->localidade;
+        $this->uf = $dados_cep->uf;
+    }
 }

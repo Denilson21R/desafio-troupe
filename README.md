@@ -1,24 +1,66 @@
-# Lumen PHP Framework
+# Desafio Troupe
+O desenvolvimento da API foi feito utilizando Lumen, que é um microframework PHP que tem como objetivo a criação de microsserviços e APIs. Como banco de dados foi escolhido o MySQL por maior afinidade e por ser o padrão do framework.
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/lumen)](https://packagist.org/packages/laravel/lumen-framework)
+## Endpoints
+Documentação simples dos endpoints da API. Para cada endpoint temos, em sequência, o método, o URL, parâmetros e a descrição de seu retorno.
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+#### 1. GET `/users``
+Sem parâmetros 
 
-## Official Documentation
+&nbsp;
+Retorna status ``200`` todos os usuários em ordem alfabética JSON
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+#### 2. GET ``/users/{cpf}``
+| Nome         | Obrigatório |     Tipo      |
+|--------------|-------------|:-------------:|
+| cpf          | obrigatorio | string na url |
 
-## Contributing
+&nbsp;
+Retorna status ``200`` e o usuário em formato JSON
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### 3. POST ``/users``
+- Parâmetros
 
-## Security Vulnerabilities
+| Nome         | Obrigatório |                  Tipo                   |
+|--------------|-------------|:---------------------------------------:|
+| cpf          | obrigatorio |                 string                  |
+| name         | obrigatorio |                 string                  |
+| last_name    | obrigatorio |                 string                  |
+| email        | obrigatorio |                 string                  |
+| phone        | obrigatorio | string somente com caracteres numericos |
+| cep          | obrigatorio |                 char(8)                 |
+| public_place | opcional    |                 string                  |
+| district     | opcional    |                 string                  |
+| city         | opcional    |                 string                  |
+| uf           | opcional    |                 char(2)                 |
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+&nbsp;
+Retorna status ``201`` em caso de sucesso e o estado do usuário em formato JSON
 
-## License
+#### 4. PUT `/users/{cpf}``
+- Parâmetros
 
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+| Nome         | Obrigatório |                  Tipo                   |
+|--------------|-------------|:---------------------------------------:|
+| cpf          | obrigatorio |              string na url              |
+| name         | obrigatorio |                 string                  |
+| last_name    | obrigatorio |                 string                  |
+| email        | obrigatorio |                 string                  |
+| phone        | obrigatorio | string somente com caracteres numericos |
+| cep          | obrigatorio |                 char(8)                 |
+| public_place | opcional    |                 string                  |
+| district     | opcional    |                 string                  |
+| city         | opcional    |                 string                  |
+| uf           | opcional    |                 char(2)                 |
+
+- Retorna status ``200`` e o estado final do usuário em formato JSON
+
+#### 5. DELETE ``/users/{cpf}``
+- Parâmetros
+
+| Nome         | Obrigatório |                  Tipo                   |
+|--------------|-------------|:---------------------------------------:|
+| cpf          | obrigatorio |              string na url              |
+
+&nbsp;
+Retorna ``204`` em caso de sucesso

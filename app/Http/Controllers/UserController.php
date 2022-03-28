@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\Http;
 
 class UserController extends Controller
 {
-    public function getUsers(){
-        $users = User::all();
+    public function getUsers()
+    {
+        $users = User::orderBy('name')->get();
 
         if (empty($users)){
             $users = [];
@@ -18,7 +19,8 @@ class UserController extends Controller
         return response()->json($users,200);
     }
 
-    public function getUser(Request $request, $cpf){
+    public function getUser(Request $request, $cpf)
+    {
         $user = User::where('cpf', $cpf)->first();
 
         if(!empty($user)){
@@ -28,13 +30,15 @@ class UserController extends Controller
         return response()->json(['error' => 'user not found'], 404);
     }
 
-    public function postUser(Request $request){
+    public function postUser(Request $request)
+    {
 
         $this->validate($request, [
             'name' => 'required',
             'last_name' => 'required',
             'email' => 'required',
-            'phone' => 'required',
+            'phone' => 'required|alpha_num',
+            'cep' => 'required|size:8',
             'cpf' => 'required'
         ]);
 
@@ -48,7 +52,7 @@ class UserController extends Controller
                     if(!empty($dados_cep)){
                         $request = $this->fillRequestWithCpfData($request, $dados_cep);
                     }else{
-                        return response()->json(['error' => 'zip code not found'], 422);
+                        return response()->json(['error' => 'could not find the data with this zip code'], 422);
                     }
                 }
 
@@ -66,14 +70,15 @@ class UserController extends Controller
         }
     }
 
-    public function updateUser(Request $request, $cpf){
+    public function updateUser(Request $request, $cpf)
+    {
 
         $this->validate($request, [
             'name' => 'required',
             'last_name' => 'required',
             'email' => 'required',
-            'phone' => 'required',
-            'cep' => 'required'
+            'phone' => 'required|alpha_num',
+            'cep' => 'required|size:8'
         ]);
 
         $user = User::where('cpf', $cpf)->first();
@@ -88,6 +93,7 @@ class UserController extends Controller
             if(!empty($request->cep) && empty($request->public_place) && empty($request->district) && empty($request->city) && empty($request->uf)){
                 $dados_cep = $this->getDataCpf($request->cep);
                 if($dados_cep){
+                    //$user->fillWithDataCpfData($dados_cep);
                     $this->fillUserWithDataCpf($user, $dados_cep);
                 }else{
                     return response()->json(['error' => 'zip code not found'], 422);
@@ -119,7 +125,7 @@ class UserController extends Controller
         }
     }
 
-    private function getDataCpf($cep) :mixed
+    private function getDataCpf($cep)
     {
         $cep_adaptado = str_replace('.','', str_replace('-','', $cep));
         $link_get_cep = 'https://viacep.com.br/ws/'.$cep_adaptado.'/json/';
@@ -141,6 +147,7 @@ class UserController extends Controller
         ]);
         return $request;
     }
+
 
     private function fillUserWithDataCpf(User $user, $dados_cep) :void
     {
