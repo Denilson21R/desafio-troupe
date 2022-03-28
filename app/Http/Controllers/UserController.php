@@ -93,8 +93,7 @@ class UserController extends Controller
             if(!empty($request->cep) && empty($request->public_place) && empty($request->district) && empty($request->city) && empty($request->uf)){
                 $dados_cep = $this->getDataCpf($request->cep);
                 if($dados_cep){
-                    //$user->fillWithDataCpfData($dados_cep);
-                    $this->fillUserWithDataCpf($user, $dados_cep);
+                    $user->fillWithDataCpfData($dados_cep);
                 }else{
                     return response()->json(['error' => 'zip code not found'], 422);
                 }
@@ -146,16 +145,6 @@ class UserController extends Controller
             'district' => $dados_cep->bairro,
         ]);
         return $request;
-    }
-
-
-    private function fillUserWithDataCpf(User $user, $dados_cep) :void
-    {
-        $user->cep = $dados_cep->cep;
-        $user->public_place = $dados_cep->logradouro;
-        $user->district = $dados_cep->bairro;
-        $user->city = $dados_cep->localidade;
-        $user->uf = $dados_cep->uf;
     }
 }
 
